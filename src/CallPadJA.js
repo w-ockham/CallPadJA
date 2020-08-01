@@ -120,28 +120,28 @@
 	    text = $('input').val()
 	    $(ele).find("span").each(function(index, s) { s.innerHTML = '';});
 	    station_query(text)
-	    console.log(keystate)
 	    if (text.length > 2) {
 		if (text[text.length -1] == '/')
-		    keystate = 2
-		    else
-			keystate = 3
+		    keystate = 2;
+		else
+		    keystate = 3
 	    }
 	    else if (text.length > 1) {
 		keystate = 2
 	    } else if (text.length > 0) {
-		if (text[0] == 'J')
+		if (text[0].toUpperCase() == 'J')
 		   keystate = 2
 		else
 		    keystate = 1
 	    } else
-		this.keystate = 0
+		keystate = 0
 
 	    $(ele).find("button").each(function( index, b) {
 		if (index < 20)
 		    b.innerHTML=keymap[keystate][index+1];
 		})
 	}
+	
 	function station_query(text) {
 	    if (text.length > 2)
 		if (options.candidates > 0) {
@@ -250,7 +250,7 @@
 		else if (text.length > 1) {
 			keystate = 2
 		} else if (text.length > 0) {
-		    if (text[0] == 'J')
+		    if (text[0].toUppperCase() == 'J')
 			keystate = 2
 		    else
 			keystate = 1
