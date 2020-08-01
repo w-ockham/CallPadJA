@@ -125,7 +125,6 @@
 			    text.pop();
 			    var arr=text.join('');
 			    text=arr+str[i+1];
-			    samestate = true;
 			}
 			else if(text[text.length-1]==str[i+1])
 			{
@@ -133,7 +132,6 @@
 			    text.pop();
 			    var arr=text.join('');
 			    text=arr+str[i];
-			    samestate = true;
 			} else
 			    text=text+str[i];
 		    } if (str.length==3) {
@@ -143,7 +141,6 @@
 			    text.pop();
 			    var arr=text.join('');
 			    text=arr+str[i+1];
-			    samestate = true;
 			}
 			else if(text[text.length-1]==str[i+1])
 			{
@@ -151,7 +148,6 @@
 			    text.pop();
 			    var arr=text.join('');
 			    text=arr+str[i+2];
-			    samestate = true;
 			}
 			else if(text[text.length-1]==str[i+2])
 			{
@@ -159,7 +155,6 @@
 			    text.pop();
 			    var arr=text.join('');
 			    text=arr+str[i];
-			    samestate = true;
 			} else
 			    text=text+str[i];
 		    }
@@ -207,6 +202,7 @@
 		document.getElementById("time").value=0
 		samestate = true;
 	    }
+	    
 	    if(!samestate) {
 		if (keystate == 0) {
 		    if (str[i] == 'J')
