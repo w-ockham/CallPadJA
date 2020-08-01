@@ -169,7 +169,15 @@
 		    })
 		}
 	}
-
+	
+	function swaplast(text,s) {
+	    text=text.split('');
+	    text.pop();
+	    var arr=text.join('');
+	    text=arr+s;
+	    return text
+	}
+	
 	function inputmessage(text,button_pressed){
 	    if($("#time").length)
 	    {  
@@ -191,51 +199,35 @@
 	    var i=0, samestate = false;
 	    
 	    if (str.length > 1) {
-		if(!diff||diff<1500) {
+		if(text.length == 1)
+			text=text+str[i]
+		else if(!diff||diff<1500) {
 		    if (str.length==2) {
-			if(keystate == 2 && str[i] == 'J')
-			    text=text+str[i]
-			else if(text[text.length-1]==str[i])
-			{
-			    text=text.split('');
-			    text.pop();
-			    var arr=text.join('');
-			    text=arr+str[i+1];
-			}
+			if(text[text.length-1]==str[i])
+			    text=swaplast(text,str[i+1])
 			else if(text[text.length-1]==str[i+1])
-			{
-			    text=text.split('');
-			    text.pop();
-			    var arr=text.join('');
-			    text=arr+str[i];
-			} else
+			    text=swaplast(text,str[i])
+			else if (keystate == 2)
+			    text=swaplast(text,str[i])
+			else
 			    text=text+str[i];
 		    } if (str.length==3) {
 			if(text[text.length-1]==str[i])
-			{
-			    text=text.split('');
-			    text.pop();
-			    var arr=text.join('');
-			    text=arr+str[i+1];
-			}
+			    text=swaplast(text,str[i+1])
 			else if(text[text.length-1]==str[i+1])
-			{
-			    text=text.split('');
-			    text.pop();
-			    var arr=text.join('');
-			    text=arr+str[i+2];
-			}
+			    text=swaplast(text,str[i+2])
 			else if(text[text.length-1]==str[i+2])
-			{
-			    text=text.split('');
-			    text.pop();
-			    var arr=text.join('');
-			    text=arr+str[i];
-			} else
+			    text=swaplast(text,str[i])
+			else if (keystate == 2)
+			    text=swaplast(text,str[i])
+			else
 			    text=text+str[i];
 		    }
-		} else
+		} else if (keystate == 2)
+		    text=swaplast(text,str[i])
+		else
 		    text=text+str[i];
+
 		samestate = true;
 	    }
 	    else if (str[i] == 'Clear') {
@@ -272,7 +264,14 @@
 		station_query(text)
 		return text
 	    } else if(str[i] != '*') {
-		text=text+$(event.currentTarget).text();
+		txt = $(event.currentTarget).text();
+		if (text.length == 1)
+		    text=text+txt
+		else if (keystate == 2 && str[i] == 'S')
+		    text=swaplast(text,txt)
+		else
+		    text=text+txt
+		
 		if (str[i] == 'S')
 		    samestate = true;
 	    } else {
