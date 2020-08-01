@@ -14,3 +14,5 @@
 パラメータ`width`でキーの幅(デフォルト300px)を、`height`で高さ(デフォルト100px)を指定します。
 
 パラメータ`candidates`で、[総務省無線局等情報検索Web-API](https://www.tele.soumu.go.jp/j/musen/webapi/)を使ったコールサイン検索の候補数の最大値(デフォルト20)を指定します。
+## 使用例
+こちらが[使用例](https://www.sotalive.tk/logconvbeta/callpadJA.html)です。
