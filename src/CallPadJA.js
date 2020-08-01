@@ -120,8 +120,8 @@
 	    text = $('input').val()
 	    station_query(text)
 	    if (text.length > 2) {
-		if (text[text.length -1] == '/')
-		    keystate = 2;
+		if (text[text.length -1] == '/' && keystate == 3)
+		    keystate = 4;
 		else
 		    keystate = 3
 	    }
@@ -242,8 +242,8 @@
 	    } else if (str[i] == 'BS') {
 		text = text.slice(0,-1)
 		if (text.length > 2) {
-		    if (text[text.length -1] == '/')
-			keystate = 2
+		    if (text[text.length -1] == '/' && keystate == 3)
+			keystate = 4
 		    else
 			keystate = 3
 		}
