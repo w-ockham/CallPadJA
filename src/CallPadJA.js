@@ -9,12 +9,20 @@
 
 (function($){
     $.fn.keypad=function(options){
-	var options=$.extend({width:300,height:100},options);
+	var options=$.extend({width:300,height:100,candidates:20},options);
 	var ele=this;
 	var keymap=[];
 	var keystate = 0;
+	var num_query=''
+	var list_query=''
+	var query_param=''
+	var list_query_param=''
 	var target={
 	    init:function(){
+		num_query = 'https://www.tele.soumu.go.jp/musen/num?'
+		list_query = 'https://www.tele.soumu.go.jp/musen/list?'
+		query_param = 'ST=1&OW=AT&OF=2&MA='
+		list_query_param = 'ST=1&OW=AT&OF=2&DA=0&SC=0&DC=1&MA='
 		funckey = {
 		    "11":'Clear',"12":"BS"
 		}
@@ -55,13 +63,24 @@
 	    },
 	    markup:function(){
 		var input=document.createElement("INPUT");
-		input.style.display="block";
-		input.style.width=options.width-10+"px";
+		input.setAttribute('list',"__soumu_callsign_list")
+		input.setAttribute('oninput',"station_input();")
+		input.style.width=options.width-50+"px";
 		input.style.height="20px";
 		input.style.margin="0px 0px 5px 0px";
 		input.style.padding="0px";
 		input.style.fontSize="15px";
 		ele.append(input);
+		var span=document.createElement("SPAN");
+		span.style.width=20+"px";
+		span.style.height="10px";
+		span.style.margin="0px 0px 5px 0px";
+		span.style.padding="0px";
+		span.style.fontSize="10px";
+		ele.append(span);
+		var datalist=document.createElement("DATALIST")
+		datalist.id="__soumu_callsign_list";
+		ele.append(datalist);
 		ele.css({"width":options.width,"height":options.height,"display":"block"});
 		for(var key in keymap[keystate]){
 		    var button=document.createElement("BUTTON");
@@ -96,6 +115,40 @@
             var button_val=$(event.currentTarget).attr("data-value");
             $(ele).children("input").val(inputmessage($(ele).children('input').val(),button_val));
 	});
+
+	window.station_input = function station_input (){
+	    station_query($('input').val())
+	    $(ele).find("span").each(function(index, s) { s.innerHTML = '';});
+	}
+	
+	function station_query(text) {
+	    if (text.length > 2)
+		if (options.candidates > 0) {
+		    dl = $('datalist')
+		    dl.empty()
+		    $.getJSON(num_query, query_param + text,function(res) {
+			number = res['musenInformation']['totalCount']
+			$(ele).find("span").each(function(index, s) { s.innerHTML = number+'局';});
+			if (number < options.candidates ) {
+			    $.getJSON(list_query, list_query_param + text,function(res){
+				station = res['musen']
+				if (station) {
+				    for (var s of station) {
+					name = s['listInfo']['name']
+					call = name.replace(/\S*（(\w+)）\S*/g,'$1')
+					addr = s['listInfo']['tdfkCd']
+					console.log(call +' ' +  addr + ' ' +name)
+					var opt = document.createElement("OPTION")
+					opt.value=call
+					dl.append(opt)
+				    }
+				}
+			    })
+			}
+		    })
+		}
+	}
+
 	function inputmessage(text,button_pressed){
 	    if($("#time").length)
 	    {  
@@ -169,7 +222,7 @@
 		    if (index < 20)
 			b.innerHTML=keymap[keystate][index+1];
 		})
-	
+		$(ele).find("span").each(function(index, s) { s.innerHTML = '';});
 		return text
 	    } else if (str[i] == 'BS') {
 		text = text.slice(0,-1)
@@ -193,6 +246,7 @@
 		    if (index < 20)
 			b.innerHTML=keymap[keystate][index+1];
 		})
+		station_query(text)
 		return text
 	    } else if(str[i] != '*') {
 		text=text+$(event.currentTarget).text();
@@ -225,6 +279,7 @@
 			b.innerHTML=keymap[keystate][index+1];
 		})
 	    }
+	    station_query(text)
 	    return text;
 	}
 	return target;  
