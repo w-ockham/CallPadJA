@@ -42,15 +42,15 @@
 		    },
 		    {
 			"1":'A D',"2":'E F',"3":'G H',"4":'I J',"5":'K L',
-			"6":'M N',"7":'O P',"8":'Q R',"9":'S',"10":'*',
+			"6":'M N',"7":'O P',"8":'Q R',"9":'S',"10":'確定',
 			"11":'1',"12":'2',"13":'3',"14":'4',"15":'5',
 			"16":'6',"17":'7',"18":'8',"19":'9',"20":'0'
 		    },
 		    {
 			"1":'A B',"2":'C D',"3":'E F',"4":'G H',"5":'I J',
 			"6":'K L',"7":'M N',"8":'O P',"9":'Q R',"10":'S T',
-			"11":'U V',"12":'W X',"13":'Y Z',"14":'/',"15":'*',
-			"16":'*',"17":'*',"18":'*',"19":'*',"20":'*'
+			"11":'U V',"12":'W X',"13":'Y Z',"14":'/',"15":'確定',
+			"16":'1 2',"17":'3 4',"18":'5 6',"19":'7 8',"20":'9 0'
 		    },
 		    {
 			"1":'1',"2":'2',"3":'3',"4":'4',"5":'5',
@@ -118,7 +118,6 @@
 
 	window.station_input = function station_input (){
 	    text = $('input').val()
-	    $(ele).find("span").each(function(index, s) { s.innerHTML = '';});
 	    station_query(text)
 	    if (text.length > 2) {
 		if (text[text.length -1] == '/')
@@ -143,7 +142,8 @@
 	}
 	
 	function station_query(text) {
-	    if (text.length > 2)
+	    $(ele).find("span").each(function(index, s) { s.innerHTML = '';});
+	    if (text.length > 2 && text.indexOf('/') == -1)
 		if (options.candidates > 0) {
 		    dl = $('datalist')
 		    dl.empty()
@@ -155,10 +155,10 @@
 				station = res['musen']
 				if (station) {
 				    for (var s of station) {
-					name = s['listInfo']['name']
-					call = name.replace(/\S*（(\w+)）\S*/g,'$1')
+					info = s['listInfo']['name']
+					call = info.replace(/[\S\s]*（(\w+)）[\S\s]*/g,'$1')
+					name = info.replace(/([\S\s]*)（\w+）[\S\s]*/g,'$1')
 					addr = s['listInfo']['tdfkCd']
-					console.log(call +' ' +  addr + ' ' +name)
 					var opt = document.createElement("OPTION")
 					opt.value=call
 					dl.append(opt)
@@ -250,7 +250,7 @@
 		else if (text.length > 1) {
 			keystate = 2
 		} else if (text.length > 0) {
-		    if (text[0].toUppperCase() == 'J')
+		    if (text[0].toUpperCase() == 'J')
 			keystate = 2
 		    else
 			keystate = 1
@@ -263,7 +263,7 @@
 		})
 		station_query(text)
 		return text
-	    } else if(str[i] != '*') {
+	    } else if(str[i] != '確定') {
 		txt = $(event.currentTarget).text();
 		if (text.length == 1)
 		    text=text+txt
@@ -301,6 +301,7 @@
 			b.innerHTML=keymap[keystate][index+1];
 		})
 	    }
+	    
 	    station_query(text)
 	    return text;
 	}
