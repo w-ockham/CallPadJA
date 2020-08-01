@@ -1,5 +1,7 @@
 # CallPadJA
-日本国内のコールサイン入力用キーパッドです。
+日本国内のコールサイン入力用キーパッドのJQueryプラグインです。
+オリジナルは[こちら](https://github.com/Viijay-Kr/Keypad-plugin)です。
+
 ## 使い方
 呼び出し方は以下の通りです。
 ```HTML
