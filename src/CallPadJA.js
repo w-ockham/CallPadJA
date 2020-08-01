@@ -193,7 +193,9 @@
 	    if (str.length > 1) {
 		if(!diff||diff<1500) {
 		    if (str.length==2) {
-			if(text[text.length-1]==str[i])
+			if(keystate == 2 && str[i] == 'J')
+			    text=text+str[i]
+			else if(text[text.length-1]==str[i])
 			{
 			    text=text.split('');
 			    text.pop();
